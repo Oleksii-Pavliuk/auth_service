@@ -1,0 +1,32 @@
+# Docker files #
+################
+Dockerfile
+.dockerignore
+
+# Git files #
+#############
+.git*
+
+# Documentation files #
+#######################
+*.md
+LICENSE
+
+
+# OS files #
+#############
+Thumbs.db
+.DS_Store
+.vscode
+
+# Ignore development files and directories
+##########################################
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+*.log
+

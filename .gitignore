@@ -1,0 +1,8 @@
+.git
+
+auth/__pycache__
+auth/migrations
+
+Thumbs.db
+.DS_Store
+.vscode

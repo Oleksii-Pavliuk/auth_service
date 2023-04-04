@@ -1,0 +1,5 @@
+Django==4.1.4
+djangorestframework==3.14.0
+djangorestframework-api-key==2.3.0
+psycopg2==2.9.5
+python-consul==1.1.0
