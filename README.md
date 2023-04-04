@@ -28,6 +28,8 @@ To secure API http request must include eather API KEY or Authorisation credenti
 
 App running in container and connected to Consul server and postgreSQL server.
 
+* container runs interactivly to deregister service from Consul when it stopped correctly, so it should be stopped only from containers bash *
+
 To run this container running consul containers (```infrastructure/platform/docker-compose.yml```) and postgres container (```infrastructure/users-postgresDB-deploy.sh```) <b>at least!!!</b> required.
 
 All settings of Django app contains in docker run script named ```infrastructure/auth-service-deploy.sh``` and may be specified in it before running, all sensitive data should be stored in Kubernetes or Docker swarm secrets. 
