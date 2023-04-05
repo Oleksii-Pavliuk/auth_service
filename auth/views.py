@@ -21,60 +21,70 @@ class UserAuth(APIView):
     permission_classes = [HasAPIKey | IsAdminUser]
 # Add user
     def put(self, request):
-        username = request.data['username']
-        email = request.data["email"]
-        password = request.data["password"]
         try:
+            username = request.data['username']
+            email = request.data["email"]
+            password = request.data["password"]
             user = User.objects.create_user(username, email, password)
-        except IntegrityError:
-             print(request.data + IntegrityError)
-             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializer = UserSerializer(user)
-        user.save()
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=201)
-    
+            serializer = UserSerializer(user)
+            user.save()
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=201)
+        except (IntegrityError, KeyError, User.DoesNotExist):
+            print('bad request\n')
+            print(request.data)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 #Auth user
     def post(self, request):
-        username = request.data["username"]
-        password = request.data["password"]
+        print(request.data)
         try:
+            username = request.data["username"]
+            password = request.data["password"]
+
             print(User.objects.all())
             user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            print(request.data + 'user does not exist')
+
+            if not check_password(password, user.password):
+                print('credentials wrong \n')
+                print(request.data)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            
+            else:
+                serializer = UserSerializer(user)
+                return Response(serializer.data)
+        except (IntegrityError, KeyError, User.DoesNotExist):
+            print('bad request\n')
+            print(request.data)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        if not check_password(password, user.password):
-            print(request.data + 'credentials wrong')
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
 
 
 #Edit password
     def patch(self, request):
-        pk = request.data['id']
-
         try:
+            pk = request.data['id']
             user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            print(request.data + User.DoesNotExist)
+            user.password = make_password(request.data['password'])
+            user.save()
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        except (IntegrityError, KeyError, User.DoesNotExist):
+            print('bad request\n')
+            print(request.data)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-        user.password = make_password(request.data['password'])
-        user.save()
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
 
 
 #Delete user
     def delete(self, request):
-        pk = request.data['id']
-        user = User.objects.get(pk=pk)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        try:
+            pk = request.data['id']
+            user = User.objects.get(pk=pk)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except (IntegrityError, KeyError, User.DoesNotExist):
+            print('bad request\n')
+            print(request.data)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 #Consul health check
 def health_check(request):
