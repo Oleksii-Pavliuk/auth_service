@@ -4,3 +4,5 @@
     App is tested and container run script created
 ## 0.1.1 (Unreleased)
     Error handling improvement
+## 0.1.2 
+    Open telemetry subscription code added but commented for now
