@@ -178,7 +178,7 @@ atexit.register(
 )
 
 
-# Create a Consul client object
+# Create a OpenTelemetry client object
 def register_OTel():
     resource = Resource(attributes={
         "service.name": "AuthSERVICE"
@@ -198,4 +198,4 @@ def register_OTel():
     trace.set_tracer_provider(tracer_provider)
     
 # Call the registration function in your Django app
-register_OTel()
+# register_OTel()
