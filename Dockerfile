@@ -9,6 +9,10 @@ COPY requirements.txt /app
 # Install the requirements
 RUN pip3 install -r requirements.txt
 
+# Automatic instrumentation will generate telemetry data
+RUN opentelemetry-bootstrap -a install
+
+
 # Copy the entire project to the working directory
 COPY . /app
 
@@ -16,4 +20,4 @@ COPY . /app
 EXPOSE 8000
 
 # Run the migrations and start the server
-CMD ["sh", "-c", " python3 manage.py runserver 0.0.0.0:8000"]
+CMD ["sh", "-c"," python3 manage.py runserver 0.0.0.0:8000 --noreload"]

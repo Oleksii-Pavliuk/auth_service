@@ -16,11 +16,7 @@ import os
 import uuid
 import consul
 import socket
-from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
 
 
 
@@ -177,25 +173,3 @@ atexit.register(
     deregister
 )
 
-
-# Create a OpenTelemetry client object
-def register_OTel():
-    resource = Resource(attributes={
-        "service.name": "AuthSERVICE"
-    })
-
-    # Create a SpanExporter to export spans to the desired endpoint
-    span_exporter = OTLPSpanExporter(endpoint="http://localhost:4317")
-
-    # Create a BatchSpanProcessor to batch and export spans
-    span_processor = BatchSpanProcessor(span_exporter)
-
-    # Create a TracerProvider with the desired resource and span processor
-    tracer_provider = TracerProvider(resource=resource)
-    tracer_provider.add_span_processor(span_processor)
-
-    # Set the TracerProvider as the global tracer provider
-    trace.set_tracer_provider(tracer_provider)
-    
-# Call the registration function in your Django app
-# register_OTel()
