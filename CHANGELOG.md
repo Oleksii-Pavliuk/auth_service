@@ -5,4 +5,4 @@
 ## 0.1.1 (Unreleased)
     Error handling improvement
 ## 0.1.2 
-    Open telemetry subscription code added but commented for now
+    Open telemetry sending traces to Jaeger
